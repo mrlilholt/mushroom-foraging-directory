@@ -1,0 +1,35 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #2E7D32;
+    color: white;
+    padding: 15px;
+}
+
+input {
+    padding: 10px;
+    margin-top: 10px;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 5px;
+    border: none;
+}
+
+#map {
+    height: 500px;
+    width: 100%;
+}
+
+#locations {
+    margin: 20px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
