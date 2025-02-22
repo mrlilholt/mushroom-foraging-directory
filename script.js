@@ -64,4 +64,36 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => console.error("Error loading search results:", error));
     });
+    // Fetch iNaturalist Mushroom Data and Add to Map
+function fetchINaturalistData() {
+    const iNatURL = "https://api.inaturalist.org/v1/observations?taxon_id=47170&geo=true&per_page=50";
+
+    fetch(iNatURL)
+        .then(response => response.json())
+        .then(data => {
+            data.results.forEach(obs => {
+                if (obs.geojson) {
+                    const lat = obs.geojson.coordinates[1];
+                    const lon = obs.geojson.coordinates[0];
+                    const species = obs.taxon ? obs.taxon.name : "Unknown species";
+                    const image = obs.photos.length > 0 ? obs.photos[0].url : "";
+
+                    // Add Marker for iNaturalist Observation
+                    let marker = L.marker([lat, lon]).addTo(map);
+                    let popupContent = `<b>${species}</b><br>From iNaturalist`;
+
+                    if (image) {
+                        popupContent += `<br><img src="${image}" width="100px">`;
+                    }
+
+                    marker.bindPopup(popupContent);
+                }
+            });
+        })
+        .catch(error => console.error("Error fetching iNaturalist data:", error));
+}
+
+// Call the function to load iNaturalist Data
+fetchINaturalistData();
+
 });
