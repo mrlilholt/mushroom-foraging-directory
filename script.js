@@ -65,12 +65,19 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("Error loading search results:", error));
     });
     // Fetch iNaturalist Mushroom Data and Add to Map
-function fetchINaturalistData() {
-    const iNatURL = "https://api.inaturalist.org/v1/observations?taxon_id=47170&geo=true&per_page=50";
+// Function to Fetch iNaturalist Data Based on Selected Species
+function fetchINaturalistData(taxonID) {
+    const iNatURL = `https://api.inaturalist.org/v1/observations?taxon_id=${taxonID}&geo=true&per_page=50`;
 
     fetch(iNatURL)
         .then(response => response.json())
         .then(data => {
+            map.eachLayer(layer => {
+                if (layer instanceof L.Marker) {
+                    map.removeLayer(layer);
+                }
+            });
+
             data.results.forEach(obs => {
                 if (obs.geojson) {
                     const lat = obs.geojson.coordinates[1];
@@ -78,7 +85,6 @@ function fetchINaturalistData() {
                     const species = obs.taxon ? obs.taxon.name : "Unknown species";
                     const image = obs.photos.length > 0 ? obs.photos[0].url : "";
 
-                    // Add Marker for iNaturalist Observation
                     let marker = L.marker([lat, lon]).addTo(map);
                     let popupContent = `<b>${species}</b><br>From iNaturalist`;
 
@@ -93,7 +99,12 @@ function fetchINaturalistData() {
         .catch(error => console.error("Error fetching iNaturalist data:", error));
 }
 
-// Call the function to load iNaturalist Data
-fetchINaturalistData();
+// Event Listener for Dropdown Change
+document.getElementById("mushroom-select").addEventListener("change", function () {
+    fetchINaturalistData(this.value);
+});
+
+// Load Default (All Mushrooms) on Page Load
+fetchINaturalistData("47170");
 
 });
