@@ -64,24 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => console.error("Error loading search results:", error));
     });
-    // Initialize Geoapify Address Search Control
-    const myAPIKey = '699c9a9d6121475d88664353e3d18146'; // Replace with your Geoapify API key
-    const addressSearchControl = L.control.geoapifyAddressSearch({
-        apiKey: myAPIKey,
-        position: 'topleft',
-        placeholder: 'Enter zip code...',
-        resultCallback: (result) => {
-            if (result && result.latlng) {
-                const { lat, lng } = result.latlng;
-                map.setView([lat, lng], 10); // Adjust zoom level as needed
-                fetchINaturalistData(lat, lng, selectedTaxonID);
-            } else {
-                alert('Location not found. Please enter a valid zip code.');
-            }
-        }
-    });
-    map.addControl(addressSearchControl);
-
+    
     // Fetch iNaturalist Mushroom Data and Add to Map
 // Function to Fetch iNaturalist Data Based on Selected Species
 function fetchINaturalistData(taxonID) {
