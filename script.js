@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }).addTo(map);
 
     // Google Sheets CSV URL (Replace with your own URL)
-    const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQFo-fDrzdfv_RJDR_c7zSAY9RynfmgPgcLjqvfg0s0v9jaZU7tr152LCAuCNK9IGT6splkGnW_uAnx/pub?output=csv";
+    const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRZvwRsHw2ysaXiRQmu6kcc2M-S6XwmLAgeEnQmfE5MADXtll3ahcFBi8jNhHDO1f-edo2FDAvVilTl/pub?output=csv";
 
     fetch(sheetURL)
         .then(response => response.text())
@@ -15,13 +15,14 @@ document.addEventListener("DOMContentLoaded", function () {
             const rows = csvText.split("\n").slice(1); // Skip header row
             rows.forEach(row => {
                 const cols = row.split(",");
-                if (cols.length < 4) return;
 
-                const name = cols[0].trim();
-                const lat = parseFloat(cols[1]);
-                const lon = parseFloat(cols[2]);
-                const species = cols[3].trim();
-                const notes = cols[4] ? cols[4].trim() : "No additional info";
+                if (cols.length < 5) return; // Ensure all required fields exist
+
+                const name = cols[1].trim(); // Location Name
+                const lat = parseFloat(cols[2]); // Latitude
+                const lon = parseFloat(cols[3]); // Longitude
+                const species = cols[4].trim(); // Mushroom Species Found
+                const notes = cols.length > 5 ? cols[5].trim() : "No additional info"; // Optional notes
 
                 if (!isNaN(lat) && !isNaN(lon)) {
                     L.marker([lat, lon])
@@ -35,24 +36,26 @@ document.addEventListener("DOMContentLoaded", function () {
     // Search Functionality
     document.getElementById("search").addEventListener("keyup", function () {
         let searchValue = this.value.toLowerCase();
-        let markers = map.eachLayer(layer => {
-            if (layer instanceof L.Marker) map.removeLayer(layer);
-        });
 
         fetch(sheetURL)
             .then(response => response.text())
             .then(csvText => {
                 const rows = csvText.split("\n").slice(1);
+                
+                map.eachLayer(layer => {
+                    if (layer instanceof L.Marker) map.removeLayer(layer);
+                });
+
                 rows.forEach(row => {
                     const cols = row.split(",");
-                    if (cols.length < 4) return;
+                    if (cols.length < 5) return;
 
-                    const name = cols[0].trim();
-                    const lat = parseFloat(cols[1]);
-                    const lon = parseFloat(cols[2]);
-                    const species = cols[3].trim();
+                    const name = cols[1].trim();
+                    const lat = parseFloat(cols[2]);
+                    const lon = parseFloat(cols[3]);
+                    const species = cols[4].trim();
 
-                    if (name.toLowerCase().includes(searchValue)) {
+                    if (!isNaN(lat) && !isNaN(lon) && name.toLowerCase().includes(searchValue)) {
                         L.marker([lat, lon])
                             .addTo(map)
                             .bindPopup(`<b>${name}</b><br>🍄 ${species}`);
