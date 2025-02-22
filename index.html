@@ -8,11 +8,16 @@
     <script defer src="script.js"></script>
     <script defer src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.css" />
+    <script src="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.js"></script>  
 </head>
 <body>
     <header>
         <h1>Mushroom Foraging Locations</h1>
         <label for="mushroom-select">Select Mushroom:</label>
+        <input type="text" id="zipCodeInput" placeholder="Enter Zip Code">
+<button onclick="handleZipCodeSearch()">Search</button>
+
 <select id="mushroom-select">
     <option value="47170">All Mushrooms</option>
     <option value="1062674">Morel (*Morchella*)</option>
