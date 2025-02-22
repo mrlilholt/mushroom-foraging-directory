@@ -73,9 +73,8 @@ document.addEventListener("DOMContentLoaded", function () {
         resultCallback: (result) => {
             if (result && result.latlng) {
                 const { lat, lng } = result.latlng;
-                map.setView([lat, lng], 10);
-                const selectedTaxonID = document.getElementById("mushroom-select").value;
-                fetchINaturalistData(selectedTaxonID, lat, lng);
+                map.setView([lat, lng], 10); // Adjust zoom level as needed
+                fetchINaturalistData(lat, lng, selectedTaxonID);
             } else {
                 alert('Location not found. Please enter a valid zip code.');
             }
@@ -85,11 +84,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Fetch iNaturalist Mushroom Data and Add to Map
 // Function to Fetch iNaturalist Data Based on Selected Species
-function fetchINaturalistData(taxonID, lat, lng) {
-    let iNatURL = `https://api.inaturalist.org/v1/observations?taxon_id=${taxonID}&geo=true&per_page=50`;
-    if(lat && lng) {
-        iNatURL += `&lat=${lat}&lng=${lng}`;
-    }
+function fetchINaturalistData(taxonID) {
+    const iNatURL = `https://api.inaturalist.org/v1/observations?taxon_id=${taxonID}&geo=true&per_page=50`;
 
     fetch(iNatURL)
         .then(response => response.json())
