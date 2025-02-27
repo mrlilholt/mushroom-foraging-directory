@@ -91,17 +91,17 @@ document.addEventListener("DOMContentLoaded", function () {
                         const lon = obs.geojson.coordinates[0];
                         const species = obs.taxon ? obs.taxon.name : "Unknown species";
                         const image = obs.photos.length > 0 ? obs.photos[0].url : "";
-                        
-                        // Create a marker first
-                        let marker = L.marker([lat, lon]).addTo(map);
-                        
-                        // Use reverse geocoding to get an address
+
+                        // Create a marker and bind a default popup
+                        let marker = L.marker([lat, lon]).addTo(map).bindPopup("Loading address…");
+
+                        // Use reverse geocoding to update the popup content
                         reverseGeocode(lat, lon, function(address) {
                             let popupContent = `<b>${species}</b><br>Location: ${address}`;
                             if (image) {
                                 popupContent += `<br><img src="${image}" width="100px">`;
                             }
-                            marker.bindPopup(popupContent);
+                            marker.getPopup().setContent(popupContent);
                         });
                     }
                 });
