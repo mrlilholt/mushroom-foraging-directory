@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         const species = obs.taxon ? obs.taxon.name : "Unknown species";
                         const image = obs.photos.length > 0 ? obs.photos[0].url : "";
 
-                        // Create a marker and bind a default popup
+                        // Create a marker with a default popup content
                         let marker = L.marker([lat, lon]).addTo(map).bindPopup("Loading address…");
 
                         // Use reverse geocoding to update the popup content
@@ -162,8 +162,9 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                // If an address is found, pass it to the callback; otherwise, use fallback text.
-                let address = data.address ? data.display_name : "No street address available";
+                console.log("Nominatim data:", data);
+                // Use display_name directly if available; otherwise fallback.
+                let address = data.display_name ? data.display_name : "No street address available";
                 callback(address);
             })
             .catch(error => {
