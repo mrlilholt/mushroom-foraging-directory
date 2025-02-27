@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Fetch iNaturalist Mushroom Data and Add to Map
 // Function to Fetch iNaturalist Data Based on Selected Species
 function fetchINaturalistData(taxonID) {
-    const iNatURL = `https://api.inaturalist.org/v1/observations?taxon_id=${taxonID}&geo=true&per_page=50`;
+    const iNatURL = `https://api.inaturalist.org/v1/observations?taxon_id=${taxonID}&geo=true&per_page=200`;
 
     fetch(iNatURL)
         .then(response => response.json())
