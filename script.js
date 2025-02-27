@@ -66,46 +66,91 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     
     // Fetch iNaturalist Mushroom Data and Add to Map
-// Function to Fetch iNaturalist Data Based on Selected Species
-function fetchINaturalistData(taxonID) {
-    const iNatURL = `https://api.inaturalist.org/v1/observations?taxon_id=${taxonID}&geo=true&per_page=200`;
+    // Function to Fetch iNaturalist Data Based on Selected Species
+    function fetchINaturalistData(taxonID, lat, lng) {
+        // Build API URL with optional lat, lng, and a radius (in km)
+        let iNatURL = `https://api.inaturalist.org/v1/observations?taxon_id=${taxonID}&geo=true&per_page=200`;
+        if (lat && lng) {
+            iNatURL += `&lat=${lat}&lng=${lng}&radius=10`;
+        }
 
-    fetch(iNatURL)
-        .then(response => response.json())
-        .then(data => {
-            map.eachLayer(layer => {
-                if (layer instanceof L.Marker) {
-                    map.removeLayer(layer);
-                }
-            });
-
-            data.results.forEach(obs => {
-                if (obs.geojson) {
-                    const lat = obs.geojson.coordinates[1];
-                    const lon = obs.geojson.coordinates[0];
-                    const species = obs.taxon ? obs.taxon.name : "Unknown species";
-                    const image = obs.photos.length > 0 ? obs.photos[0].url : "";
-
-                    let marker = L.marker([lat, lon]).addTo(map);
-                    let popupContent = `<b>${species}</b><br>From iNaturalist`;
-
-                    if (image) {
-                        popupContent += `<br><img src="${image}" width="100px">`;
+        fetch(iNatURL)
+            .then(response => response.json())
+            .then(data => {
+                // Remove existing markers from the map
+                map.eachLayer(layer => {
+                    if (layer instanceof L.Marker) {
+                        map.removeLayer(layer);
                     }
+                });
 
-                    marker.bindPopup(popupContent);
+                // Loop through observations and add markers
+                data.results.forEach(obs => {
+                    if (obs.geojson) {
+                        const lat = obs.geojson.coordinates[1];
+                        const lon = obs.geojson.coordinates[0];
+                        const species = obs.taxon ? obs.taxon.name : "Unknown species";
+                        const image = obs.photos.length > 0 ? obs.photos[0].url : "";
+
+                        let marker = L.marker([lat, lon]).addTo(map);
+                        let popupContent = `<b>${species}</b><br>From iNaturalist`;
+
+                        if (image) {
+                            popupContent += `<br><img src="${image}" width="100px">`;
+                        }
+
+                        marker.bindPopup(popupContent);
+                    }
+                });
+            })
+            .catch(error => console.error("Error fetching iNaturalist data:", error));
+    }
+
+    // Event Listener for Dropdown Change
+    document.getElementById("mushroom-select").addEventListener("change", function () {
+        fetchINaturalistData(this.value);
+    });
+
+    // Load Default (All Mushrooms) on Page Load
+    fetchINaturalistData("47170");
+
+    const searchInput = document.getElementById("search");
+
+    // Listen for the Enter key on the search box
+    searchInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+            const zip = searchInput.value.trim();
+            if (zip) {
+                geocodeZip(zip);
+            }
+        }
+    });
+
+    // Geocode ZIP code using Zippopotam.us API
+    function geocodeZip(zip) {
+        fetch(`http://api.zippopotam.us/us/${zip}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Invalid ZIP code");
                 }
+                return response.json();
+            })
+            .then(data => {
+                const place = data.places[0];
+                const lat = parseFloat(place.latitude);
+                const lng = parseFloat(place.longitude);
+
+                // Update map view based on geocoded coordinates
+                map.setView([lat, lng], 10);
+
+                // Fetch iNaturalist data for the selected species near the ZIP location
+                const selectedTaxonID = document.getElementById("mushroom-select").value;
+                fetchINaturalistData(selectedTaxonID, lat, lng);
+            })
+            .catch(error => {
+                console.error("Error geocoding ZIP:", error);
+                alert("Unable to locate ZIP code. Please try a valid ZIP code.");
             });
-        })
-        .catch(error => console.error("Error fetching iNaturalist data:", error));
-}
-
-// Event Listener for Dropdown Change
-document.getElementById("mushroom-select").addEventListener("change", function () {
-    fetchINaturalistData(this.value);
-});
-
-// Load Default (All Mushrooms) on Page Load
-fetchINaturalistData("47170");
+    }
 
 });
