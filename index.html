@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7543751145244238"
-     crossorigin="anonymous"></script>   
     <meta charset="UTF-8">
+    <!-- Meta description optimized for mushroom foraging searches -->
+    <meta name="description" content="Discover local mushroom foraging spots near you! Search by ZIP code to find mushrooms around your area — perfect for hobbyists and professional foragers.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-adsense-account" content="ca-pub-7543751145244238">
-    <title>Mushroom Foraging Directory</title>
+    <title>Mushroom Foraging Directory | Find Mushrooms Near You</title>
     <link rel="stylesheet" href="style.css">
     <script defer src="script.js"></script>
     <script defer src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
@@ -14,48 +14,49 @@
     <link rel="stylesheet" href="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.css" />
     <script src="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.js"></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7543751145244238" crossorigin="anonymous"></script>
-  
 </head>
 <body>
     <header>
-        <h1>Mushroom Foraging Locations</h1>
-        <label for="mushroom-select">Select Mushroom:</label> 
-<select id="mushroom-select">
-    <option value="47170">All Mushrooms</option>
-    <option value="1062674">Morel (*Morchella*)</option>
-    <option value="47348">Chanterelle (*Cantharellus*)</option>
-    <option value="53713">Chicken of the Woods (*Laetiporus*)</option>
-    <option value="49160">Lion’s Mane (*Hericium*)</option>
-    <option value="62486">Matsutake (*Tricholoma*)</option>
-    <option value="334704">Crown Tipped Coral (*Artomyces pyxidatus*)</option>
-
-</select>
-
-
-
-        <input type="text" id="search" placeholder="Search for a location...">
+        <h1>Mushroom Foraging Directory</h1>
+        <p>Find local mushroom foraging spots near you.</p>
+        <!-- Optimized search area with instructions -->
+        <label for="mushroom-select">Select Mushroom Type:</label> 
+        <select id="mushroom-select">
+            <option value="47170">All Mushrooms</option>
+            <option value="1062674">Morel (*Morchella*)</option>
+            <option value="47348">Chanterelle (*Cantharellus*)</option>
+            <option value="53713">Chicken of the Woods (*Laetiporus*)</option>
+            <option value="49160">Lion’s Mane (*Hericium*)</option>
+            <option value="62486">Matsutake (*Tricholoma*)</option>
+            <option value="334704">Crown Tipped Coral (*Artomyces pyxidatus*)</option>
+        </select>
+        <!-- Added an explanatory placeholder -->
+        <input type="text" id="search" placeholder="Enter ZIP code e.g., 90210 to see mushrooms near you">
     </header>
 
+    <!-- Map showing mushroom locations -->
     <div id="map"></div>
 
     <section id="locations">
-        <h2>Foraging Spots</h2>
+        <h2>Local Foraging Spots</h2>
+        <p>Explore the latest mushroom observations from around your area. Whether you're an enthusiast or a professional forager, use the search above to find mushrooms near you.</p>
         <ul id="location-list"></ul>
     </section>
 
     <footer>
-        <p>Submit new locations <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZ8UUoCnl-LPxDAuzXQh31AZhbSwa7VU79YwiF4DuEOg8KSQ/viewform?usp=header">here</a></p>
+        <p>Submit new locations <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZ8UUoCnl-LPxDAuzXQh31AZhbSwa7VU79YwiF4DuEOg8KSQ/viewform?usp=header" target="_blank" rel="noopener">here</a></p>
     </footer>
-<!-- AdSense ad unit -->
-<!-- horizontalAd -->
-<ins class="adsbygoogle"
-    style="display:block"
-    data-ad-client="ca-pub-7543751145244238"
-    data-ad-slot="4494393755"
-    data-ad-format="auto"
-    data-full-width-responsive="true"></ins>
-<script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-</script>  
+
+    <!-- AdSense ad unit -->
+    <!-- horizontalAd -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-7543751145244238"
+         data-ad-slot="4494393755"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
 </body>
 </html>
