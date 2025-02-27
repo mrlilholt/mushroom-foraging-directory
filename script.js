@@ -126,9 +126,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Geocode ZIP code using Zippopotam.us API
+    // Geocode ZIP code using Zippopotam.us API with HTTPS
     function geocodeZip(zip) {
-        fetch(`http://api.zippopotam.us/us/${zip}`)
+        fetch(`https://api.zippopotam.us/us/${zip}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error("Invalid ZIP code");
