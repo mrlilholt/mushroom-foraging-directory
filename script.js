@@ -92,17 +92,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         const species = obs.taxon ? obs.taxon.name : "Unknown species";
                         const image = obs.photos.length > 0 ? obs.photos[0].url : "";
 
-                        // Create a marker with a default popup content
-                        let marker = L.marker([lat, lon]).addTo(map).bindPopup("Loading address…");
+                        let marker = L.marker([lat, lon]).addTo(map);
+                        let popupContent = `<b>${species}</b><br>From iNaturalist`;
 
-                        // Use reverse geocoding to update the popup content
-                        reverseGeocode(lat, lon, function(address) {
-                            let popupContent = `<b>${species}</b><br>Location: ${address}`;
-                            if (image) {
-                                popupContent += `<br><img src="${image}" width="100px">`;
-                            }
-                            marker.getPopup().setContent(popupContent);
-                        });
+                        if (image) {
+                            popupContent += `<br><img src="${image}" width="100px">`;
+                        }
+
+                        marker.bindPopup(popupContent);
                     }
                 });
             })
@@ -153,23 +150,6 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => {
                 console.error("Error geocoding ZIP:", error);
                 alert("Unable to locate ZIP code. Please try a valid ZIP code.");
-            });
-    }
-
-    // New function for reverse geocoding using Nominatim
-    function reverseGeocode(lat, lng, callback) {
-        const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`;
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                console.log("Nominatim data:", data);
-                // Use display_name directly if available; otherwise fallback.
-                let address = data.display_name ? data.display_name : "No street address available";
-                callback(address);
-            })
-            .catch(error => {
-                console.error("Reverse geocoding error:", error);
-                callback("Address lookup failed");
             });
     }
 
